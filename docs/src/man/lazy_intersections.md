@@ -60,8 +60,6 @@ hasmethod(intersection, Tuple{HPolytope{Float64}, HPolytope{Float64}})
 ```
 
 ```@example ellipsoids
-import LazySets.Approximations.overapproximate
-
 # the parameter epsilon controls the accuracy of the iterative refinement,
 # with respect to the Hausdorff distance
 H₁(ε) = overapproximate(E₁, HPolygon, ε)
@@ -96,8 +94,6 @@ the min of the support function of each set. We can see in the following experim
 the resulting set is quite tight.
 
 ```@example ellipsoids
-using Polyhedra
-
 # overapproximate the lazy intersection using a box
 Xbox = overapproximate(E₁ ∩ E₂, BoxDirections(2))
 
@@ -123,11 +119,11 @@ but overapproximation with template directions can be used in any dimension.
 Let's time it!
 
 ```@example ellipsoids
-using BenchmarkTools
-
-@btime overapproximate($E₁ ∩ $E₂, BoxDirections(2))
-@btime overapproximate($E₁ ∩ $E₂, OctDirections(2));
+@time overapproximate(E₁ ∩ E₂, BoxDirections(2))
+@time overapproximate(E₁ ∩ E₂, OctDirections(2));
 ```
+
+(For proper timing, always use [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl).)
 
 We can work with higher dimensional ellipsoids as well:
 
@@ -148,9 +144,10 @@ for n in [2, 5, 50, 100]
     global E₁, E₂ = rand_ellipsoid(n), rand_ellipsoid(n)
 
     # overapproximate the lazy intersection using an n-dimensional box
-    @btime overapproximate($E₁ ∩ $E₂, BoxDirections($n))
+    @time overapproximate(E₁ ∩ E₂, BoxDirections(n))
     
     # overapproximate the lazy intersection using octagonal directions in R^n
-    @btime overapproximate($E₁ ∩ $E₂, OctDirections($n))
+    @time overapproximate(E₁ ∩ E₂, OctDirections(n))
 end;
 ```
+(Again, for proper timing use [BenchmarkTools.jl](https://github.com/JuliaCI/BenchmarkTools.jl).)
