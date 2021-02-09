@@ -307,10 +307,9 @@ function _sample!(D::Vector{VN},
     P = set(sampler)
     vlist = vertices_list(P)
     m = length(vlist)
-    c = chebyshev_center(P)
 
     @inbounds for i in 1:length(D)
-        p = copy(c)
+        p = vlist[rand(1:m)]  # start from a random vertex
         for j in Random.randperm(m)
             p += rand(rng, U) * (vlist[j] - p)
         end
