@@ -311,11 +311,8 @@ function _sample!(D::Vector{VN},
 
     @inbounds for i in 1:length(D)
         p = copy(c)
-        for (j, vj) in enumerate(vlist)
-            if rand([0, 1]) == 0
-                continue
-            end
-            p += rand(rng, U) * (vj - p)
+        for j in Random.randperm(m)
+            p += rand(rng, U) * (vlist[j] - p)
         end
         D[i] = p
     end
